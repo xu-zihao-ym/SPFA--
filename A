@@ -1,0 +1,80 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAXN = 1005;
+struct Edge {
+    int to;
+    double weight;
+};
+vector<Edge> g[MAXN];
+int n, m;
+
+bool hasPositiveCycle(double w) {
+    vector<double> dist(n + 1, 0);	// 到每个点的"最长距离"
+    vector<int> cnt(n + 1, 0);	 	// 每个点被更新了多少次
+    vector<bool> inq(n + 1, false);	 // 每个点是否在队列中
+    queue<int> q;		// 队列，存待处理的点
+    
+    for(int i = 1; i <= n; i++)
+	{
+        q.push(i);
+        inq[i] = true;
+    }
+    while(!q.empty())
+	{
+        int u = q.front(); q.pop();
+        inq[u] = false;
+        
+        for(auto &e : g[u])
+		{
+            double w_cur = log(w) + e.weight;	//e.weight = log(c/a)（原始配方的收益比） log(w) = 加上 w 参数后的调整
+            if(dist[e.to] < dist[u] + w_cur)
+			{
+                dist[e.to] = dist[u] + w_cur;
+                cnt[e.to] = cnt[u] + 1;	//记录到达 e.to 这个点，路径上经过了多少条边
+                
+                if(cnt[e.to] >= n) return true;	//如果某个点被更新了 n 次或更多，说明路径中肯定有环
+                
+                if(!inq[e.to])
+				{
+                    q.push(e.to);
+                    inq[e.to] = true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
+    cin >> n >> m;
+    
+    for(int i = 0; i < m; i++) {
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        g[b].push_back({d, log(1.0 * c / a)});		// 数学性质：log(a × b) = log(a) + log(b)
+    }
+    
+    double l = 0, r = 1;
+    
+    for(int step = 0; step < 100; step++) {
+        double mid = (l + r) / 2;
+        if(hasPositiveCycle(mid)) {
+            r = mid;
+        } else {
+            l = mid;
+        }
+    }
+    
+    cout << fixed << setprecision(10) << l << endl;
+    return 0;
+}
+/*数学原理
+在一个有 n 个点的图中：
+最长的简单路径（不重复经过任何点）最多有 n-1 条边
+如果某个点被更新了 n 次，说明路径中一定有重复点
+有重复点 = 有环
+因为是"最长路"更新，这个环一定是正环（能增加距离）*/
