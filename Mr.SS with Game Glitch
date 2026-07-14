@@ -1,0 +1,52 @@
+Mr.SS is developing a game. In this game, players can craft things using various types of resources, and things crafted can also be used to craft other things.
+
+Formally speaking, there are n types of items, numbered from 1 to n, and m recipes in the game. In the i-th recipe, players can use k × a_i items of the b_i-th type to craft k × c_i items of the d_i-th type, where k can be any positive real number.
+
+One day, he finds that one player owns more than 18,446,744,073,709,551,615 identical items, which causes a server crash. This is obviously impossible without using glitches.
+
+Mr.SS soon finds out that there is something wrong with the crafting recipe. Players may get infinite resources by crafting some special things over and over again!
+
+Mr.SS doesn't want to adjust the recipes one by one, so he simply added an argument w. Now players can use k × a_i items of the b_i-th type to craft w × k × c_i items of the d_i-th type.
+
+Mr.SS wonders: What's the maximum w that he can set so that no player can get infinite items by crafting things over and over again?
+
+---
+
+Input
+
+The first line contains two integers n, m (2 ≤ n ≤ 1000; 2 ≤ m ≤ 2000), which are the number of item types and the number of recipes.
+
+Each of the next m lines contains four integers a_i, b_i, c_i, d_i (1 ≤ b_i, d_i ≤ n; b_i ≠ d_i; 1 ≤ a_i, c_i ≤ 10^3), describing a recipe.
+
+It is guaranteed that players can get infinite items using the recipes above (when w = 1).
+
+---
+
+Output
+
+Output a real number w, which is the maximum w satisfying the condition.
+
+Your answer will be accepted if and only if the absolute error between your answer and the correct answer is no more than 10^(-6).
+
+Formally, let your answer be a, and the jury's answer be b. Your answer is accepted if and only if |a-b| / max(1, |b|) ≤ 10^(-6).
+
+---
+
+Examples
+
+Sample Input 1:
+3 3
+1 1 2 2
+1 2 2 1
+1 3 1 1
+
+Sample Output 1:
+0.5000000000
+
+Sample Input 2:
+2 2
+1 1 1 2
+1 2 1 1
+
+Sample Output 2:
+1.0000000000
